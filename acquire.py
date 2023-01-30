@@ -6,6 +6,16 @@ from sklearn.model_selection import train_test_split
 def get_connection(db, user=env.username, host=env.host, password=env.password):
     return f'mysql+pymysql://{user}:{password}@{host}/{db}'
 
+def get_data(dbname, query, nameofcsv):
+    filename = nameofcsv
+
+    if os.path.isfile(filename):
+        return pd.read_csv(filename)
+    else:
+        df = pd.read_sql(query, get_connection(dbname))
+        df.to_csv(filename)
+        return df
+
 def get_titanic_data():
     filename = 'titanic.csv'
 
